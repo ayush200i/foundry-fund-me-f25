@@ -5,14 +5,13 @@ import {Test, console} from "forge-std/Test.sol";
 import {FundMe} from "../../src/FundMe.sol";
 import {DeployFundMe} from "../../script/DeployFundMe.s.sol";
 
-
 contract FundMeTest is Test {
     FundMe fundME;
 
-    address USER  = makeAddr("user");
+    address USER = makeAddr("user");
     uint256 constant SEND_VALUE = 0.1 ether;
-    uint256 constant STARTING_BALANCE = 10 ether; 
-    uint256 constant GAS_PRICE = 1 ;
+    uint256 constant STARTING_BALANCE = 10 ether;
+    uint256 constant GAS_PRICE = 1;
 
     function setUp() external {
         DeployFundMe deployFundMe = new DeployFundMe();
@@ -57,7 +56,7 @@ contract FundMeTest is Test {
         assertEq(funder, USER);
     }
 
-    modifier funded(){
+    modifier funded() {
         vm.prank(USER);
         fundME.fund{value: SEND_VALUE}();
         _;
@@ -75,7 +74,7 @@ contract FundMeTest is Test {
         uint256 funderStartingBalance = address(fundME).balance;
 
         //Act
-        vm.prank(fundME.getOwner());//200
+        vm.prank(fundME.getOwner()); //200
         fundME.withdraw(); //should have spent gas
 
         //Assert
@@ -86,8 +85,8 @@ contract FundMeTest is Test {
         assertEq(funderEndingBalance, 0);
         assertEq(endingOwnerBalance, startingOwnerBalance + funderStartingBalance);
     }
-       
-       //Arrange
+
+    //Arrange
 
     function testWithdrawWithMultipleFunders() public funded {
         uint160 numberOfFunders = 10;
@@ -101,18 +100,18 @@ contract FundMeTest is Test {
         uint256 funderStartingBalance = address(fundME).balance;
 
         //Act
-        
 
         vm.startPrank(fundME.getOwner());
         fundME.withdraw();
         vm.stopPrank();
-        
+
         //Assert
 
         assert(address(fundME).balance == 0);
         assert(funderStartingBalance + startingOwnerBalance == fundME.getOwner().balance);
     }
-    function testWithdrawWithMultipleFundersCheaper() public funded  {
+
+    function testWithdrawWithMultipleFundersCheaper() public funded {
         uint160 numberOfFunders = 10;
         uint160 startingFunderIndex = 2;
         for (uint160 i = startingFunderIndex; i < numberOfFunders; i++) {
@@ -124,12 +123,11 @@ contract FundMeTest is Test {
         uint256 funderStartingBalance = address(fundME).balance;
 
         //Act
-        
 
         vm.startPrank(fundME.getOwner());
         fundME.cheaperWithdraw();
         vm.stopPrank();
-        
+
         //Assert
 
         assert(address(fundME).balance == 0);

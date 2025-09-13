@@ -5,36 +5,36 @@
 
 pragma solidity ^0.8.18;
 
-import {Script,console} from "forge-std/Script.sol";
+import {Script, console} from "forge-std/Script.sol";
 import {DevOpsTools} from "foundry-devops/src/DevOpsTools.sol";
 import {FundMe} from "../src/FundMe.sol";
 
-contract FundFundMe is Script{
-    uint256 constant  SEND_VALUE = 0.1 ether;
-    function fundFundMe(address mostRecentlyDeployed) public{
+contract FundFundMe is Script {
+    uint256 constant SEND_VALUE = 0.1 ether;
 
-       FundMe(payable(mostRecentlyDeployed)).fund{value: SEND_VALUE}();  //if anything goes wrong, check here
+    function fundFundMe(address mostRecentlyDeployed) public {
+        FundMe(payable(mostRecentlyDeployed)).fund{value: SEND_VALUE}(); //if anything goes wrong, check here
 
         console.log("Funded FundMe contract with %s ether", SEND_VALUE);
     }
-    function run() external{
-        address mostRecentlyDeployed = DevOpsTools.get_most_recent_deployment(
-            "FundMe", block.chainid);
-                    vm.startBroadcast();
+
+    function run() external {
+        address mostRecentlyDeployed = DevOpsTools.get_most_recent_deployment("FundMe", block.chainid);
+        vm.startBroadcast();
         fundFundMe(mostRecentlyDeployed);
-                vm.stopBroadcast();
+        vm.stopBroadcast();
     }
 }
 
-contract WithdrawFundMe is Script{
-     function withdrawFundMe(address mostRecentlyDeployed) public{
+contract WithdrawFundMe is Script {
+    function withdrawFundMe(address mostRecentlyDeployed) public {
         vm.startBroadcast();
-       FundMe(payable(mostRecentlyDeployed)).withdraw();  //if anything goes wrong, check here
+        FundMe(payable(mostRecentlyDeployed)).withdraw(); //if anything goes wrong, check here
         vm.stopBroadcast();
-     }
-    function run() external{
-        address mostRecentlyDeployed = DevOpsTools.get_most_recent_deployment(
-            "FundMe", block.chainid);
+    }
+
+    function run() external {
+        address mostRecentlyDeployed = DevOpsTools.get_most_recent_deployment("FundMe", block.chainid);
         withdrawFundMe(mostRecentlyDeployed);
     }
 }

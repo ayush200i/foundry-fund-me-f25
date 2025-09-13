@@ -9,19 +9,20 @@ import {FundFundMe, WithdrawFundMe} from "../../script/Interaction.s.sol";
 contract InteractionsTest is Test {
     FundMe fundME;
 
-    address USER  = makeAddr("user");
+    address USER = makeAddr("user");
     uint256 constant SEND_VALUE = 0.1 ether;
-    uint256 constant STARTING_BALANCE = 10 ether; 
-    uint256 constant GAS_PRICE = 1 ;
+    uint256 constant STARTING_BALANCE = 10 ether;
+    uint256 constant GAS_PRICE = 1;
 
     function setUp() external {
         DeployFundMe deployFundMe = new DeployFundMe();
         fundME = deployFundMe.run();
         vm.deal(USER, STARTING_BALANCE);
     }
-    function testUserCanFundInteractions()public{
+
+    function testUserCanFundInteractions() public {
         FundFundMe fundFundMe = new FundFundMe();
-            vm.deal(address(fundFundMe), 1 ether);// added afterwards
+        vm.deal(address(fundFundMe), 1 ether); // added afterwards
         fundFundMe.fundFundMe(address(fundME));
 
         WithdrawFundMe withdrawFundMe = new WithdrawFundMe();
