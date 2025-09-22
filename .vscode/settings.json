@@ -1,0 +1,6 @@
+{
+    "solidity.remappings": [
+        "@chainlink/contracts/=lib/chainlink-brownie-contracts/contracts/",
+        "forge-std/=lib/forge-std/src/"
+    ]
+}
